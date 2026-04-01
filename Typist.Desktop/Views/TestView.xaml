@@ -1,0 +1,317 @@
+<UserControl x:Class="Typist.Desktop.Views.TestView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="clr-namespace:Typist.Desktop.ViewModels"
+             xmlns:helpers="clr-namespace:Typist.Desktop.Helpers"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance vm:TestViewModel}"
+             Background="Transparent">
+
+    <Grid>
+        <!-- ===================== CONFIG SCREEN ===================== -->
+        <ScrollViewer VerticalScrollBarVisibility="Auto"
+                      Visibility="{Binding IsConfiguring, Converter={StaticResource BoolToVisibilityConverter}}">
+            <StackPanel Margin="48" MaxWidth="720" HorizontalAlignment="Center">
+
+                <!-- Header -->
+                <TextBlock Text="Speed Test" FontSize="28" FontWeight="Bold"
+                           Foreground="{StaticResource TextPrimary}" Margin="0,0,0,8"/>
+                <TextBlock Text="Choose a mode and challenge yourself." FontSize="14"
+                           Foreground="{StaticResource TextSecondary}" Margin="0,0,0,40"/>
+
+                <!-- Mode Selection -->
+                <TextBlock Text="TEST MODE" FontSize="11" FontWeight="SemiBold"
+                           Foreground="{StaticResource AccentCyan}" Margin="0,0,0,16"/>
+
+                <Grid Margin="0,0,0,40">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Quick (untimed) -->
+                    <Button Grid.Column="0" Margin="0,0,8,0"
+                            Command="{Binding SelectDurationCommand}" CommandParameter="Quick">
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource DurationButton}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SelectedTestType}" Value="Quick">
+                                        <Setter Property="Background" Value="{StaticResource AccentCyanAlpha}"/>
+                                        <Setter Property="BorderBrush" Value="{StaticResource AccentCyan}"/>
+                                        <Setter Property="Foreground" Value="{StaticResource AccentCyan}"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                        <StackPanel HorizontalAlignment="Center">
+                            <TextBlock Text="&#x221E;" FontSize="22" HorizontalAlignment="Center"
+                                       Foreground="{StaticResource AccentCyan}"/>
+                            <TextBlock Text="Quick" FontSize="13" HorizontalAlignment="Center"/>
+                            <TextBlock Text="Untimed" FontSize="11" Foreground="{StaticResource TextSecondary}"
+                                       HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <!-- 1 Minute -->
+                    <Button Grid.Column="1" Margin="4,0,4,0"
+                            Command="{Binding SelectDurationCommand}" CommandParameter="1">
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource DurationButton}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SelectedTestType}" Value="Timed1Min">
+                                        <Setter Property="Background" Value="{StaticResource AccentCyanAlpha}"/>
+                                        <Setter Property="BorderBrush" Value="{StaticResource AccentCyan}"/>
+                                        <Setter Property="Foreground" Value="{StaticResource AccentCyan}"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                        <StackPanel HorizontalAlignment="Center">
+                            <TextBlock Text="1" FontSize="22" HorizontalAlignment="Center"
+                                       Foreground="{StaticResource AccentCyan}"/>
+                            <TextBlock Text="Minute" FontSize="13" HorizontalAlignment="Center"/>
+                            <TextBlock Text="60 seconds" FontSize="11" Foreground="{StaticResource TextSecondary}"
+                                       HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <!-- 2 Minutes -->
+                    <Button Grid.Column="2" Margin="4,0,4,0"
+                            Command="{Binding SelectDurationCommand}" CommandParameter="2">
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource DurationButton}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SelectedTestType}" Value="Timed2Min">
+                                        <Setter Property="Background" Value="{StaticResource AccentCyanAlpha}"/>
+                                        <Setter Property="BorderBrush" Value="{StaticResource AccentCyan}"/>
+                                        <Setter Property="Foreground" Value="{StaticResource AccentCyan}"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                        <StackPanel HorizontalAlignment="Center">
+                            <TextBlock Text="2" FontSize="22" HorizontalAlignment="Center"
+                                       Foreground="{StaticResource AccentCyan}"/>
+                            <TextBlock Text="Minutes" FontSize="13" HorizontalAlignment="Center"/>
+                            <TextBlock Text="120 seconds" FontSize="11" Foreground="{StaticResource TextSecondary}"
+                                       HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <!-- 5 Minutes -->
+                    <Button Grid.Column="3" Margin="8,0,0,0"
+                            Command="{Binding SelectDurationCommand}" CommandParameter="5">
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource DurationButton}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SelectedTestType}" Value="Timed5Min">
+                                        <Setter Property="Background" Value="{StaticResource AccentCyanAlpha}"/>
+                                        <Setter Property="BorderBrush" Value="{StaticResource AccentCyan}"/>
+                                        <Setter Property="Foreground" Value="{StaticResource AccentCyan}"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                        <StackPanel HorizontalAlignment="Center">
+                            <TextBlock Text="5" FontSize="22" HorizontalAlignment="Center"
+                                       Foreground="{StaticResource AccentCyan}"/>
+                            <TextBlock Text="Minutes" FontSize="13" HorizontalAlignment="Center"/>
+                            <TextBlock Text="300 seconds" FontSize="11" Foreground="{StaticResource TextSecondary}"
+                                       HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+
+                <!-- Start Button -->
+                <Button Content="Start Test  &#x26A1;" Style="{StaticResource PrimaryButtonLarge}"
+                        Command="{Binding StartTestCommand}"
+                        HorizontalAlignment="Center"/>
+
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- ===================== TYPING SCREEN ===================== -->
+        <Grid Visibility="{Binding IsTyping, Converter={StaticResource BoolToVisibilityConverter}}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Top Stats Bar -->
+            <Border Grid.Row="0" Background="{StaticResource Surface1}"
+                    BorderBrush="{StaticResource Border1}" BorderThickness="0,0,0,1"
+                    Padding="48,16">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Left stats -->
+                    <StackPanel Grid.Column="0" Orientation="Horizontal">
+                        <StackPanel Margin="0,0,48,0">
+                            <TextBlock Text="WPM" FontSize="11" FontWeight="SemiBold"
+                                       Foreground="{StaticResource AccentCyan}"/>
+                            <TextBlock Text="{Binding CurrentWpm, StringFormat='{}{0:F0}'}" FontSize="32"
+                                       FontWeight="Bold" Foreground="{StaticResource TextPrimary}"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,0,48,0">
+                            <TextBlock Text="RAW" FontSize="11" FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextSecondary}"/>
+                            <TextBlock Text="{Binding CurrentRawWpm, StringFormat='{}{0:F0}'}" FontSize="32"
+                                       FontWeight="Bold" Foreground="{StaticResource TextSecondary}"/>
+                        </StackPanel>
+                        <StackPanel>
+                            <TextBlock Text="ACCURACY" FontSize="11" FontWeight="SemiBold"
+                                       Foreground="{StaticResource AccentGreen}"/>
+                            <TextBlock Text="{Binding CurrentAccuracy, StringFormat='{}{0:F1}%'}" FontSize="32"
+                                       FontWeight="Bold" Foreground="{StaticResource TextPrimary}"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- Timer -->
+                    <TextBlock Grid.Column="1" Text="{Binding TimerDisplay}" FontSize="48" FontWeight="Bold"
+                               FontFamily="Consolas" Foreground="{StaticResource AccentCyan}"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                    <!-- Right: restart -->
+                    <StackPanel Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center">
+                        <Button Content="&#x21BA; Restart" Style="{StaticResource SecondaryButton}"
+                                Command="{Binding RestartTestCommand}"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Typing area -->
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="48,32">
+                <Border Background="{StaticResource Surface1}" CornerRadius="16" Padding="32,28">
+                    <ItemsControl ItemsSource="{Binding CharItems}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border BorderThickness="0,0,0,2" Padding="0,0,0,2" Margin="0,2"
+                                        BorderBrush="{Binding IsCurrent, Converter={StaticResource BoolToCursorBrushConverter}}">
+                                    <TextBlock Text="{Binding Character}" FontSize="22" FontFamily="Consolas"
+                                               Foreground="{Binding State, Converter={StaticResource CharStateToColorConverter}}"/>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Border>
+            </ScrollViewer>
+
+            <!-- Bottom instructions -->
+            <Border Grid.Row="2" Background="{StaticResource Surface1}"
+                    BorderBrush="{StaticResource Border1}" BorderThickness="0,1,0,0"
+                    Padding="48,12">
+                <TextBlock Text="Start typing to begin. Backspace to correct. Press Restart to try again."
+                           FontSize="12" Foreground="{StaticResource TextSecondary}"
+                           HorizontalAlignment="Center"/>
+            </Border>
+        </Grid>
+
+        <!-- ===================== RESULTS SCREEN ===================== -->
+        <ScrollViewer VerticalScrollBarVisibility="Auto"
+                      Visibility="{Binding IsFinished, Converter={StaticResource BoolToVisibilityConverter}}">
+            <StackPanel Margin="48" MaxWidth="720" HorizontalAlignment="Center">
+
+                <!-- Grade display -->
+                <Border Style="{StaticResource CardStyle}" Margin="0,0,0,32">
+                    <StackPanel HorizontalAlignment="Center" Margin="0,16">
+                        <TextBlock Text="&#x1F3C6;" FontSize="48" HorizontalAlignment="Center" Margin="0,0,0,8"/>
+                        <TextBlock Text="Test Complete!" FontSize="24" FontWeight="Bold"
+                                   Foreground="{StaticResource TextPrimary}" HorizontalAlignment="Center"
+                                   Margin="0,0,0,4"/>
+                        <TextBlock Text="{Binding ResultGrade, StringFormat='Grade: {0}'}"
+                                   FontSize="56" FontWeight="Bold" HorizontalAlignment="Center"
+                                   Foreground="{Binding ResultGrade, Converter={StaticResource GradeToColorConverter}}"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Stats Grid -->
+                <Grid Margin="0,0,0,32">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Column="0" Grid.Row="0" Style="{StaticResource CardStyle}" Margin="0,0,8,8">
+                        <StackPanel>
+                            <TextBlock Text="WPM" FontSize="11" FontWeight="SemiBold"
+                                       Foreground="{StaticResource AccentCyan}" Margin="0,0,0,6"/>
+                            <TextBlock Text="{Binding ResultWpm, StringFormat='{}{0:F0}'}" FontSize="36"
+                                       FontWeight="Bold" Foreground="{StaticResource TextPrimary}"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Grid.Column="1" Grid.Row="0" Style="{StaticResource CardStyle}" Margin="4,0,4,8">
+                        <StackPanel>
+                            <TextBlock Text="RAW WPM" FontSize="11" FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextSecondary}" Margin="0,0,0,6"/>
+                            <TextBlock Text="{Binding ResultRawWpm, StringFormat='{}{0:F0}'}" FontSize="36"
+                                       FontWeight="Bold" Foreground="{StaticResource TextPrimary}"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Grid.Column="2" Grid.Row="0" Style="{StaticResource CardStyle}" Margin="8,0,0,8">
+                        <StackPanel>
+                            <TextBlock Text="ACCURACY" FontSize="11" FontWeight="SemiBold"
+                                       Foreground="{StaticResource AccentGreen}" Margin="0,0,0,6"/>
+                            <TextBlock Text="{Binding ResultAccuracy, StringFormat='{}{0:F1}%'}" FontSize="36"
+                                       FontWeight="Bold" Foreground="{StaticResource TextPrimary}"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Grid.Column="0" Grid.Row="1" Style="{StaticResource CardStyle}" Margin="0,0,8,0">
+                        <StackPanel>
+                            <TextBlock Text="CORRECT" FontSize="11" FontWeight="SemiBold"
+                                       Foreground="{StaticResource AccentGreen}" Margin="0,0,0,6"/>
+                            <TextBlock Text="{Binding ResultCorrectChars}" FontSize="36"
+                                       FontWeight="Bold" Foreground="{StaticResource TextPrimary}"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Grid.Column="1" Grid.Row="1" Style="{StaticResource CardStyle}" Margin="4,0,4,0">
+                        <StackPanel>
+                            <TextBlock Text="ERRORS" FontSize="11" FontWeight="SemiBold"
+                                       Foreground="{StaticResource AccentRed}" Margin="0,0,0,6"/>
+                            <TextBlock Text="{Binding ResultIncorrectChars}" FontSize="36"
+                                       FontWeight="Bold" Foreground="{StaticResource TextPrimary}"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Grid.Column="2" Grid.Row="1" Style="{StaticResource CardStyle}" Margin="8,0,0,0">
+                        <StackPanel>
+                            <TextBlock Text="DURATION" FontSize="11" FontWeight="SemiBold"
+                                       Foreground="{StaticResource AccentOrange}" Margin="0,0,0,6"/>
+                            <TextBlock Text="{Binding ResultDurationSeconds, StringFormat='{}{0}s'}" FontSize="36"
+                                       FontWeight="Bold" Foreground="{StaticResource TextPrimary}"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+                <!-- Action Buttons -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button Content="&#x21BA; Try Again" Style="{StaticResource PrimaryButtonLarge}"
+                            Command="{Binding RestartTestCommand}" Margin="0,0,16,0"/>
+                </StackPanel>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

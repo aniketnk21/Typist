@@ -1,0 +1,160 @@
+<UserControl x:Class="Typist.Desktop.Views.StatisticsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="clr-namespace:Typist.Desktop.ViewModels"
+             xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance vm:StatisticsViewModel}"
+             Background="Transparent">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="32" MaxWidth="960">
+
+            <!-- Header -->
+            <TextBlock Text="Statistics" FontSize="28" FontWeight="Bold"
+                       Foreground="{StaticResource TextPrimary}" Margin="0,0,0,8"/>
+            <TextBlock Text="Your complete typing history and progress." FontSize="14"
+                       Foreground="{StaticResource TextSecondary}" Margin="0,0,0,32"/>
+
+            <!-- Summary Cards -->
+            <Grid Margin="0,0,0,32">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Style="{StaticResource CardStyle}" Margin="0,0,12,0">
+                    <StackPanel>
+                        <TextBlock Text="BEST WPM" FontSize="11" FontWeight="SemiBold"
+                                   Foreground="{StaticResource AccentCyan}" Margin="0,0,0,8"/>
+                        <TextBlock Text="{Binding BestWpm, StringFormat='{}{0:F0}'}" FontSize="36"
+                                   FontWeight="Bold" Foreground="{StaticResource TextPrimary}"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="1" Style="{StaticResource CardStyle}" Margin="6,0,6,0">
+                    <StackPanel>
+                        <TextBlock Text="AVERAGE WPM" FontSize="11" FontWeight="SemiBold"
+                                   Foreground="{StaticResource AccentViolet}" Margin="0,0,0,8"/>
+                        <TextBlock Text="{Binding AverageWpm, StringFormat='{}{0:F1}'}" FontSize="36"
+                                   FontWeight="Bold" Foreground="{StaticResource TextPrimary}"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="2" Style="{StaticResource CardStyle}" Margin="6,0,6,0">
+                    <StackPanel>
+                        <TextBlock Text="AVG ACCURACY" FontSize="11" FontWeight="SemiBold"
+                                   Foreground="{StaticResource AccentGreen}" Margin="0,0,0,8"/>
+                        <TextBlock Text="{Binding AverageAccuracy, StringFormat='{}{0:F1}%'}" FontSize="36"
+                                   FontWeight="Bold" Foreground="{StaticResource TextPrimary}"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="3" Style="{StaticResource CardStyle}" Margin="12,0,0,0">
+                    <StackPanel>
+                        <TextBlock Text="TOTAL TESTS" FontSize="11" FontWeight="SemiBold"
+                                   Foreground="{StaticResource AccentOrange}" Margin="0,0,0,8"/>
+                        <TextBlock Text="{Binding TotalTests}" FontSize="36"
+                                   FontWeight="Bold" Foreground="{StaticResource TextPrimary}"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <!-- WPM Chart -->
+            <Border Style="{StaticResource CardStyle}" Margin="0,0,0,24"
+                    Visibility="{Binding HasData, Converter={StaticResource BoolToVisibilityConverter}}">
+                <StackPanel>
+                    <TextBlock Text="WPM Progress" FontSize="16" FontWeight="SemiBold"
+                               Foreground="{StaticResource TextPrimary}" Margin="0,0,0,16"/>
+                    <lvc:CartesianChart Height="220"
+                                        Series="{Binding ChartSeries}"
+                                        XAxes="{Binding XAxes}"
+                                        YAxes="{Binding YAxes}"
+                                        Background="Transparent"/>
+                </StackPanel>
+            </Border>
+
+            <!-- No data state -->
+            <Border Style="{StaticResource CardStyle}" Margin="0,0,0,24"
+                    Visibility="{Binding HasData, Converter={StaticResource BoolToVisibilityConverter},
+                                         ConverterParameter=Invert}">
+                <StackPanel HorizontalAlignment="Center" Margin="0,24">
+                    <TextBlock Text="&#x1F4CA;" FontSize="40" HorizontalAlignment="Center" Margin="0,0,0,12"/>
+                    <TextBlock Text="No data yet" FontSize="16" FontWeight="SemiBold"
+                               Foreground="{StaticResource TextPrimary}" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Complete some tests to see your progress chart here." FontSize="13"
+                               Foreground="{StaticResource TextSecondary}" HorizontalAlignment="Center"
+                               Margin="0,4,0,0"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Recent History -->
+            <TextBlock Text="Recent History" FontSize="18" FontWeight="SemiBold"
+                       Foreground="{StaticResource TextPrimary}" Margin="0,0,0,12"/>
+
+            <Border Style="{StaticResource CardStyle}">
+                <ListView ItemsSource="{Binding RecentResults}" Background="Transparent"
+                          BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                          MaxHeight="400">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="Padding" Value="4,6"/>
+                            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ListViewItem">
+                                        <Border x:Name="Bd" Background="{TemplateBinding Background}"
+                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                BorderThickness="{TemplateBinding BorderThickness}"
+                                                CornerRadius="4"
+                                                Padding="{TemplateBinding Padding}">
+                                            <GridViewRowPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="Bd" Property="Background" Value="{StaticResource Hover1}"/>
+                                            </Trigger>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter TargetName="Bd" Property="Background" Value="{StaticResource Surface2}"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="#" Width="40"
+                                            DisplayMemberBinding="{Binding Id}"/>
+                            <GridViewColumn Header="Date" Width="140"
+                                            DisplayMemberBinding="{Binding CompletedAt, StringFormat='{}{0:MMM dd, HH:mm}'}"/>
+                            <GridViewColumn Header="WPM" Width="80"
+                                            DisplayMemberBinding="{Binding Wpm, StringFormat='{}{0:F0}'}"/>
+                            <GridViewColumn Header="Raw WPM" Width="90"
+                                            DisplayMemberBinding="{Binding RawWpm, StringFormat='{}{0:F0}'}"/>
+                            <GridViewColumn Header="Accuracy" Width="90"
+                                            DisplayMemberBinding="{Binding Accuracy, StringFormat='{}{0:F1}%'}"/>
+                            <GridViewColumn Header="Correct" Width="80"
+                                            DisplayMemberBinding="{Binding CorrectCharacters}"/>
+                            <GridViewColumn Header="Errors" Width="70"
+                                            DisplayMemberBinding="{Binding IncorrectCharacters}"/>
+                            <GridViewColumn Header="Duration" Width="90"
+                                            DisplayMemberBinding="{Binding DurationSeconds, StringFormat='{}{0}s'}"/>
+                            <GridViewColumn Header="Type" Width="100"
+                                            DisplayMemberBinding="{Binding TestType}"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
